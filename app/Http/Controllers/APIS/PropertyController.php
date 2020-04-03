@@ -41,7 +41,7 @@ class PropertyController extends Controller
         }
             
          
-        return response()->json(['create error. check the input and try again']); 
+        return response()->json(['error' =>'create fail']); 
     }
 
      /**
@@ -61,14 +61,17 @@ class PropertyController extends Controller
 
     public function getSuburbAnalyticsSummary($value){
         $attr = 'suburb';
+        $value = ucfirst($value);
         return $this->service->getAnalyticsSummaryOf($attr,$value);
     }
     public function getStateAnalyticsSummary($value){
         $attr = 'state';
+        $value = strtoupper($value);
         return $this->service->getAnalyticsSummaryOf($attr,$value);
     }
     public function getCountryAnalyticsSummary($value){
         $attr = 'country';
+        $value = strtoupper($value);
         return $this->service->getAnalyticsSummaryOf($attr,$value);
     }
 

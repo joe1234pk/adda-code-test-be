@@ -11,7 +11,7 @@ class PropertyService{
         $msg = '';
         $entity = ''; 
         try{
-            $entity = Property::create();
+            $entity = Property::create($array);
         } 
         catch(\Exception $e){
             $msg = $e->getMessage();
@@ -29,19 +29,22 @@ class PropertyService{
     }
 
     public function getAnalyticsSummaryOf($key,$value){
-        $query1 = "SELECT min(value),max(value), count(value)/count(*), 1- count(value)/count(*)  from property_analytics
-        WHERE property_id in (SELECT id from properties WHERE $key = \"$value\")";
+        $query1 = "SELECT min(value) as min_val,max(value) as max_val, count(value)/count(*) as percentage_w_value, 1- count(value)/count(*) as percentage_wt_value from property_analytics
+        WHERE property_id in (SELECT id FROM properties WHERE $key = \"$value\")";
         $query2= "SELECT AVG(median_table.value) as median_val
         FROM (
         SELECT property_analytics.value, @rownum:=@rownum+1 as `row_number`, @total_rows:= @rownum
           FROM  property_analytics, (SELECT @rownum:=0) r
-          WHERE property_id in (SELECT id from properties WHERE $key = \"$value\")
+          WHERE property_id in (SELECT id FROM properties WHERE $key = \"$value\") 
+          AND value IS NOT NULL
           ORDER BY property_analytics.value
         ) as median_table
         WHERE median_table.row_number IN ( FLOOR((@total_rows+1)/2), FLOOR((@total_rows+2)/2) )";
         
-        $result1 = DB::select(DB::raw($query1));
-        $result2 = DB::select(DB::raw($query2));
+        $result1 = (array)DB::select(DB::raw($query1))[0];
+        $result2 = (array)DB::select(DB::raw($query2))[0];
+        
+        return Arr::collapse([$result1,$result2]);
     }
 
 }

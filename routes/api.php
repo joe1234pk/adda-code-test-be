@@ -24,7 +24,7 @@ Route::group(['namespace' =>'APIS'],function(){
         Route::get('/{id}/analytics', "PropertyController@show");
         Route::get('suburbs/{suburb}/analytics', "PropertyController@getSuburbAnalyticsSummary");
         Route::get('states/{state}/analytics', "PropertyController@getStateAnalyticsSummary");
-        Route::get('countries/{country}/analytics', "PropertyController@getCountriesAnalyticsSummary");
+        Route::get('countries/{country}/analytics', "PropertyController@getCountryAnalyticsSummary");
     });
    
     Route::group(['prefix' =>'property-analtyic'],function(){

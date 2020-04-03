@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -61,10 +62,10 @@ class Handler extends ExceptionHandler
                     'message' => $exception->getMessage()
                 ], 405);
             }
-    
+            
             return response()->json([
                 'error' => 'Not Found',
-                'message' => $exception->getMessage()
+                // 'message' => $exception->getMessage()
             ], 404);
         }
 
